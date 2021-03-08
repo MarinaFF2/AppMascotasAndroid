@@ -1,23 +1,25 @@
-package com.example.appmascotas;
+package com.example.appmascotas.adapter;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
+import com.example.appmascotas.Pet;
+import com.example.appmascotas.R;
 
 import java.util.ArrayList;
 
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder>{
-    ArrayList<Pet> listPets;
-    Activity activity;
-    public PetAdapter(ArrayList<Pet> listPets, Activity activity) {
+    private ArrayList<Pet> listPets;
+    private Context activity;
+    public PetAdapter(ArrayList<Pet> listPets, Context activity) {
         this.listPets = listPets;
         this.activity = activity;
     }
@@ -36,7 +38,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder>{
         Pet p = listPets.get(position);
         petViewHolder.imgCvFoto.setImageResource(p.getFoto());
         petViewHolder.tvCvNombre.setText(p.getName());
-        petViewHolder.tvCvLike.setText(p.getLike());
+        petViewHolder.tvCvLike.setText(p.getLike()+"");
 
         //añado listener dar like
         petViewHolder.imgCVHeart.setOnClickListener(new View.OnClickListener() {
@@ -44,17 +46,15 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder>{
             public void onClick(View v) {
                 Toast.makeText(activity,"has dado like a "+p.getName(),Toast.LENGTH_SHORT).show();
                 //añadimos el like
-                int like = Integer.parseInt(p.getLike());
-                p.setLike((like+1)+"");
-                //actualizamos la lista
-                listPets.get(position).setLike(p.getLike());
-                petViewHolder.tvCvLike.setText(p.getLike());
+                p.setLike(p.getLike()+1);
+                //actualizamos la bbdd
+                ConexionBBDD connection = new ConexionBBDD(activity,"bd_pets",null,1);
+                connection.updateLikePet(p.getId(),p.getLike());
+
+                //mostramos el nuevo like
+                petViewHolder.tvCvLike.setText(p.getLike()+"");
             }
         });
-    }
-
-    public ArrayList<Pet> getListPets() {
-        return listPets;
     }
 
     @Override

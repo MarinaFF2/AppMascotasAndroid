@@ -1,6 +1,5 @@
 package com.example.appmascotas;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+
+import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
+import com.example.appmascotas.adapter.PetAdapter;
 
 import java.util.ArrayList;
 
@@ -20,10 +22,10 @@ public class FavPetsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav_pets);
 
-        aniadimosMenu();
-        recyclerView();
+        addMenu();
+        addRecyclerView();
     }
-    private void aniadimosMenu() {
+    private void addMenu() {
         //añadimos el action bar a la activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -32,16 +34,20 @@ public class FavPetsActivity extends AppCompatActivity {
         //ponemos el icono de goBack
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-    private void recyclerView() {
-        listFavPets = (ArrayList<Pet>) getIntent().getSerializableExtra("listFavPets");
+    private void addRecyclerView() {
         rvListFavsPets = (RecyclerView) findViewById(R.id.rvListFavsPets);
+
         //añado layout de como se va a ver
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvListFavsPets.setLayoutManager(linearLayoutManager);
+
+        //buscamos las 5 mascotas favoritas
+        ConexionBBDD connection = new ConexionBBDD(this,"bd_pets",null,1);
+        listFavPets = connection.listaFavsPets();
+
         //añado adaptador
         PetAdapter adapter = new PetAdapter(listFavPets, this);
-        listFavPets = adapter.getListPets();
         rvListFavsPets.setAdapter(adapter);
     }
 

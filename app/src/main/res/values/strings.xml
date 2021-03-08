@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">Petagram</string>
     <string name="favs_pets">Fav pets</string>
+    <string name="title_activity_tabbed">TabbedActivity</string>
+    <string name="tab_text_home">Home</string>
+    <string name="tab_text_dog">Dog</string>
+    <string name="text_acercaDe">Acerca de</string>
+    <string name="text_contacto">Contacto</string>
+    <string name="title_contacto">Contacto</string>
+    <string name="text_contact_name">Nombre</string>
+    <string name="text_contact_email">Email</string>
+    <string name="text_contact_message">Escribe el mensaje</string>
+
+    <string name="button_contact_send">Enviar Comentario</string>
+    <string name="title_bio">Biografia</string>
+    <string name="text_bio_descripcion">
+        Marina Estefania Flores Fernandez \n
+        Estudiante de Desarrollo de aplicaciones multiplataforma. \n
+        Titulada en Desarrollo de aplicaciones web.
+    </string>
+
 </resources>

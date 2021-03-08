@@ -1,63 +1,77 @@
 package com.example.appmascotas;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
+import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
+import com.example.appmascotas.fragment.PerfilFragment;
+import com.example.appmascotas.fragment.RecyclerViewFragment;
+import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Pet> listPets;
-    private RecyclerView rvListPets;
+    private ViewPager pager;
+    //declaramos la bbdd
+    private ConexionBBDD connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        connection = new ConexionBBDD(this,"bd_pets",null,1);
+
         if(savedInstanceState!=null) {
+            listPets = connection.listaPets();
             //recogemos las sesiones
-            listPets = (ArrayList<Pet>) savedInstanceState.getSerializable("listPets");
-        }else if(savedInstanceState==null) {
-            //instancaimos el arrayList
-            initListPets();
+            //listPets = (ArrayList<Pet>) savedInstanceState.getSerializable("listPets");
+        }else {
+            // rellenamos el array e insertamos las mascotas en la bbdd la 1º
+            //Pet.insertarArrayPetBBDD(this);
         }
-        aniadimosMenu();
-        recyclerView();
-    }
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        //guardadmos las sesiones
-        outState.putSerializable("listPets", listPets);
-        super.onSaveInstanceState(outState);
-    }
-    private void initListPets() {
-        listPets = new ArrayList<> ();
-        listPets.add(new Pet("Bridget",R.drawable.pet_bridget,"0"));
-        listPets.add(new Pet("Chole",R.drawable.pet_chloe,"0"));
-        listPets.add(new Pet("Daisy",R.drawable.pet_daisy,"0"));
-        listPets.add(new Pet("Max",R.drawable.pet_max,"0"));
-        listPets.add(new Pet("Mel",R.drawable.pet_mel,"0"));
-        listPets.add(new Pet("Norman",R.drawable.pet_norman,"0"));
-        listPets.add(new Pet("Ozono",R.drawable.pet_ozono,"0"));
-        listPets.add(new Pet("Penaut",R.drawable.pet_peanut,"0"));
-        listPets.add(new Pet("Plumita",R.drawable.pet_plumita,"0"));
-        listPets.add(new Pet("Pompon",R.drawable.pet_pompon,"0"));
-        listPets.add(new Pet("Tatto",R.drawable.pet_tatoo,"0"));
+        addMenu();
+        addViewPager();
+        addTabLayout();
     }
 
-    private void aniadimosMenu() {
+    private void addViewPager() {
+        //añadimos adaptador view pager
+        SectionPagerAdapter pagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
+        pager = (ViewPager)findViewById(R.id.pager);
+        pager.setAdapter(pagerAdapter);
+    }
+
+    private void addTabLayout() {
+        //añadimos el tabLayoutr a la activity
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(pager);
+
+        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.icon_home));
+        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.icon_dog));
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        savedInstanceState.putSerializable("listPets", listPets);//guardamos las sesiones
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+    private void addMenu() {
         //añadimos el action bar a la activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -70,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public boolean onCreateOptionsMenu(Menu menu){
         //metodo para crear el menu y sus items
-        //añadimos el menu el add
-        getMenuInflater().inflate(R.menu.menu_fav, menu);
+        //añadimos el menu
+        getMenuInflater().inflate(R.menu.menu_back, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -79,47 +93,64 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         //metodo para saber la opcion seleccionada de los items del menu
         switch (item.getItemId()){
-            case R.id.action_create_order: //si pulsamos en el +
-                Intent i = new Intent(this, FavPetsActivity.class);
-                ArrayList<Pet> listFavPets = randomFavPets();
-                i.putExtra("listFavPets", listFavPets);
-                startActivity(i);
+            case R.id.action_fav_5: //si pulsamos en el fav 5
+                Intent intent1 = new Intent(this, FavPetsActivity.class);
+                startActivity(intent1);
+                return true;
+            case R.id.action_contact: //si pulsamos en el contacto
+                Intent intent2 = new Intent(this, ContactActivity.class);
+                startActivity(intent2);
+                return true;
+            case R.id.action_acercaDe: //si pulsamos en el acerca de
+                Intent intent3 = new Intent(this, BioActivity.class);
+                startActivity(intent3);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-    private ArrayList<Pet> randomFavPets(){
-        ArrayList<Pet> listFavPets = new ArrayList<> ();
-        final int min = 0;
-        final int max = listPets.size()-1;
-        int cont = 0;
-        while(cont <5) {//mientras sea menor que 5
-            int random = new Random().nextInt((max - min) + 1) + min;
-            if (listFavPets.size() != 0) {
-                for (Pet p : listFavPets) {
-                    if (!listPets.get(random).getName().equals(p.getName())) {
-                        cont++;
-                        listFavPets.add(listPets.get(random));
-                        break;
-                    }
-                }
-            }else{
-                cont++;
-                listFavPets.add(listPets.get(random));
-            }
-        }
-        return  listFavPets;
+
+    public void onClickDone(View view) {
+
     }
-    private void recyclerView() {
-        rvListPets = (RecyclerView) findViewById(R.id.rvListPets);
-        //añado layout de como se va a ver
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rvListPets.setLayoutManager(linearLayoutManager);
-        //añado adaptador
-        PetAdapter adapter = new PetAdapter(listPets, this);
-        listPets = adapter.getListPets();
-        rvListPets.setAdapter(adapter);
+
+    private class SectionPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionPagerAdapter(@NonNull FragmentManager fm){
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            //el fragment que va a mostrar
+            switch (position){
+                case 0:
+                    return new RecyclerViewFragment();
+                case 1:
+                    return new PerfilFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            //numero de paginas que va a mostrar
+            return 2;
+        }
+        @Nullable
+        @Override
+       public CharSequence getPageTitle(int position) {
+            //para cuando hagamos click en los titulos
+            switch (position){
+                case 0:
+                    return  "Home";
+                   // return  getResources().getDrawable(R.drawable.icon_home);
+                case 1:
+                    return "Dog";
+                    //return getResources().getDrawable(R.drawable.icon_dog);
+            }
+            return null;
+        }
     }
 }

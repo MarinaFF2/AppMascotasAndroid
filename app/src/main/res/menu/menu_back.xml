@@ -3,9 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_create_order"
+    <item android:id="@+id/action_fav_5"
         android:title="@string/favs_pets"
         android:icon="@drawable/icon_5star"
         android:orderInCategory="1"
         app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_contact"
+        android:title="@string/text_contacto"
+        android:orderInCategory="2"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_acercaDe"
+        android:title="@string/text_acercaDe"
+        android:orderInCategory="3"
+        app:showAsAction="never"/>
 </menu>
