@@ -1,6 +1,8 @@
 package com.example.appmascotas;
 
 import android.app.Activity;
+import android.content.Context;
+
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
 import java.io.Serializable;
 import java.util.ArrayList;

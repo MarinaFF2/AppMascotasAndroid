@@ -30,9 +30,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         connection = new ConexionBBDD(this,"bd_pets",null,1);
-
-        // rellenamos el array e insertamos las mascotas en la bbdd la 1º
-        //Pet.insertarArrayPetBBDD(this);
+        if(connection.listaPets() == null) {
+            // rellenamos el array e insertamos las mascotas en la bbdd la 1º vez
+            Pet.insertarArrayPetBBDD(this);
+        }
 
         addMenu();
         addViewPager();

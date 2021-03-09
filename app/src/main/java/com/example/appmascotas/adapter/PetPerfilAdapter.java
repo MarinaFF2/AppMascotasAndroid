@@ -10,7 +10,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.appmascotas.Pet;
 import com.example.appmascotas.R;
-
 import java.util.ArrayList;
 
 public class PetPerfilAdapter extends RecyclerView.Adapter<PetPerfilAdapter.PetViewHolder>{

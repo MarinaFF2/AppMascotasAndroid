@@ -22,7 +22,9 @@
             android:id="@+id/tvNombrePerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="25dp"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListPets"

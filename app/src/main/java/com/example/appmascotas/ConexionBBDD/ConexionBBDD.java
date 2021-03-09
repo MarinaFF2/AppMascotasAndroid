@@ -5,13 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
-
 import com.example.appmascotas.Pet;
-
 import java.util.ArrayList;
 
 public class ConexionBBDD extends SQLiteOpenHelper {
@@ -35,7 +31,6 @@ public class ConexionBBDD extends SQLiteOpenHelper {
         //creamos tabla de usuario
         db.execSQL(Utilidades.CREAR_TABLA_PET);//Ejecuta una sola sentencia SQL que no es una sentencia SELECT o cualquier otra sentencia SQL que devuelva datos.
     }
-
     /**
      * MEtodo para comprobar si ya se ha creado la bbdd
      * Se llama cuando la base de datos necesita ser actualizada.
