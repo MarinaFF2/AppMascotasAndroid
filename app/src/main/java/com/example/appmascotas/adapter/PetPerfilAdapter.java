@@ -1,23 +1,15 @@
 package com.example.appmascotas.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
 import com.example.appmascotas.Pet;
 import com.example.appmascotas.R;
-import com.example.appmascotas.fragment.PerfilFragment;
 
 import java.util.ArrayList;
 
@@ -42,20 +34,6 @@ public class PetPerfilAdapter extends RecyclerView.Adapter<PetPerfilAdapter.PetV
         Pet p = listPets.get(position);
         petViewHolder.imgCvFoto.setImageResource(p.getFoto());
         petViewHolder.tvCvLike.setText(p.getLike()+"");
-        /*
-        petViewHolder.cvContacto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment nuevoFragmento = new PerfilFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_PerfilFragment, nuevoFragmento);
-                transaction.addToBackStack(null);
-
-                // Commit a la transacción
-                transaction.commit();
-            }
-        });
-         */
     }
 
     @Override

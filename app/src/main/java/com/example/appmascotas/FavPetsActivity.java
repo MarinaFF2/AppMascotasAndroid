@@ -4,14 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
 import com.example.appmascotas.adapter.PetAdapter;
-
 import java.util.ArrayList;
 
 public class FavPetsActivity extends AppCompatActivity {
@@ -53,7 +50,7 @@ public class FavPetsActivity extends AppCompatActivity {
 
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == android.view.KeyEvent.KEYCODE_BACK){
-            Intent i = new Intent(FavPetsActivity.this, MainActivity.class);
+            Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             finish();
         }

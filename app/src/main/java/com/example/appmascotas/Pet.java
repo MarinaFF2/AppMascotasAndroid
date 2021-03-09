@@ -1,20 +1,8 @@
 package com.example.appmascotas;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
-import android.net.Uri;
-import android.util.Base64;
-
-import androidx.core.content.ContextCompat;
-
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
-
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 

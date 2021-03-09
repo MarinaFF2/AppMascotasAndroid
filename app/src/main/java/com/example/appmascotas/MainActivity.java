@@ -14,15 +14,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
 import com.example.appmascotas.fragment.PerfilFragment;
 import com.example.appmascotas.fragment.RecyclerViewFragment;
 import com.google.android.material.tabs.TabLayout;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Pet> listPets;
     private ViewPager pager;
     //declaramos la bbdd
     private ConexionBBDD connection;
@@ -34,14 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
         connection = new ConexionBBDD(this,"bd_pets",null,1);
 
-        if(savedInstanceState!=null) {
-            listPets = connection.listaPets();
-            //recogemos las sesiones
-            //listPets = (ArrayList<Pet>) savedInstanceState.getSerializable("listPets");
-        }else {
-            // rellenamos el array e insertamos las mascotas en la bbdd la 1º
-            //Pet.insertarArrayPetBBDD(this);
-        }
+        // rellenamos el array e insertamos las mascotas en la bbdd la 1º
+        //Pet.insertarArrayPetBBDD(this);
+
         addMenu();
         addViewPager();
         addTabLayout();
@@ -62,14 +54,6 @@ public class MainActivity extends AppCompatActivity {
         //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.icon_home));
         //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.icon_dog));
     }
-
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-        savedInstanceState.putSerializable("listPets", listPets);//guardamos las sesiones
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
 
     private void addMenu() {
         //añadimos el action bar a la activity
@@ -111,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickDone(View view) {
-
+        //este es el boton de la imagen camara
     }
 
     private class SectionPagerAdapter extends FragmentPagerAdapter {
