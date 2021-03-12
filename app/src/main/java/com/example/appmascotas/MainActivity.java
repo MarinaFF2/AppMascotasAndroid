@@ -1,7 +1,6 @@
 package com.example.appmascotas;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,22 +13,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
-import com.example.appmascotas.fragment.PerfilFragment;
-import com.example.appmascotas.fragment.RecyclerViewFragment;
-import com.google.android.material.tabs.TabLayout;
+import com.example.appmascotas.fragment.ViewPagerFragment;
+import com.google.android.material.snackbar.Snackbar;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     //declaramos la bbdd
     private ConexionBBDD connection;
+    private ArrayList<Pet> listaPets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        connection = new ConexionBBDD(this,"bd_pets",null,1);
+        connection = new ConexionBBDD(this);
         if(connection.listaPets() == null) {
             // rellenamos el array e insertamos las mascotas en la bbdd la 1º vez
             Pet.insertarArrayPetBBDD(this);
@@ -37,23 +39,20 @@ public class MainActivity extends AppCompatActivity {
 
         addMenu();
         addViewPager();
-        addTabLayout();
     }
 
     private void addViewPager() {
+        //conseguimos la lista
+        listaPets = connection.listaPets();
         //añadimos adaptador view pager
-        SectionPagerAdapter pagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
+        ScreenSlidePageFragment  pagerAdapter = new ScreenSlidePageFragment (getSupportFragmentManager());
+        for(int i = 0; i<listaPets.size()-1;i++) {
+            Fragment fragment = ViewPagerFragment.newInstance(listaPets.get(i),i);
+            pagerAdapter.addFragment(fragment);
+        }
         pager = (ViewPager)findViewById(R.id.pager);
         pager.setAdapter(pagerAdapter);
-    }
-
-    private void addTabLayout() {
-        //añadimos el tabLayoutr a la activity
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(pager);
-
-        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.icon_home));
-        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.icon_dog));
+        //pager.setPageTransformer(true, new ZoomOutPageTransformer(listaPets,MainActivity.this));
     }
 
     private void addMenu() {
@@ -74,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
-
     public boolean onOptionsItemSelected(MenuItem item){
         //metodo para saber la opcion seleccionada de los items del menu
         switch (item.getItemId()){
@@ -94,48 +92,43 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
     public void onClickDone(View view) {
         //este es el boton de la imagen camara
+        CharSequence text = "A screenshot has been made";
+        int duration = Snackbar.LENGTH_SHORT;
+
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.content),text,duration);
+        snackbar.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Undo!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //mostramos snackbar
+        snackbar.show();
     }
 
-    private class SectionPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionPagerAdapter(@NonNull FragmentManager fm){
+    public class ScreenSlidePageFragment  extends FragmentPagerAdapter {
+        List<Fragment> fragments;
+        public ScreenSlidePageFragment (@NonNull FragmentManager fm){
             super(fm);
+            this.fragments = new ArrayList<Fragment>();
         }
-
+        public void addFragment(Fragment fragment) {
+            //añadimos un fragment a la lista
+            this.fragments.add(fragment);
+        }
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            //el fragment que va a mostrar
-            switch (position){
-                case 0:
-                    return new RecyclerViewFragment();
-                case 1:
-                    return new PerfilFragment();
-            }
-            return null;
+            //devolvemos el fragment de la posicion
+            return this.fragments.get(position);
         }
 
         @Override
         public int getCount() {
-            //numero de paginas que va a mostrar
-            return 2;
-        }
-        @Nullable
-        @Override
-       public CharSequence getPageTitle(int position) {
-            //para cuando hagamos click en los titulos
-            switch (position){
-                case 0:
-                    return  "Home";
-                   // return  getResources().getDrawable(R.drawable.icon_home);
-                case 1:
-                    return "Dog";
-                    //return getResources().getDrawable(R.drawable.icon_dog);
-            }
-            return null;
+            //devolvemos el tamaño de la lista
+            return listaPets.size()-1;
         }
     }
 }

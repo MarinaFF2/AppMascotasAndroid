@@ -1,6 +1,11 @@
 package com.example.appmascotas.ConexionBBDD;
 
 public class Utilidades {
+    //Nombre de la BD
+    public static final String NAMEBBDD="bd_pets";
+    //Version de la BD
+    public static final int DB_VERSION = 1;
+
     //Constantes campos tabla pet
     public static final String TABLA_PET="pet";
     public static final String CAMPO_ID_PET="id_pet";

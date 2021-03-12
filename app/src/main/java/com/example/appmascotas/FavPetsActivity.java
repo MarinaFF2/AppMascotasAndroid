@@ -8,12 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
-import com.example.appmascotas.adapter.PetAdapter;
+import com.example.appmascotas.adapter.ListPetAdapter;
 import java.util.ArrayList;
 
 public class FavPetsActivity extends AppCompatActivity {
     private ArrayList<Pet> listFavPets;
     private RecyclerView rvListFavsPets;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +23,7 @@ public class FavPetsActivity extends AppCompatActivity {
         addMenu();
         addRecyclerView();
     }
+
     private void addMenu() {
         //añadimos el action bar a la activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -31,6 +33,7 @@ public class FavPetsActivity extends AppCompatActivity {
         //ponemos el icono de goBack
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
     private void addRecyclerView() {
         rvListFavsPets = (RecyclerView) findViewById(R.id.rvListFavsPets);
 
@@ -40,11 +43,11 @@ public class FavPetsActivity extends AppCompatActivity {
         rvListFavsPets.setLayoutManager(linearLayoutManager);
 
         //buscamos las 5 mascotas favoritas
-        ConexionBBDD connection = new ConexionBBDD(this,"bd_pets",null,1);
+        ConexionBBDD connection = new ConexionBBDD(this);
         listFavPets = connection.listaFavsPets();
 
         //añado adaptador
-        PetAdapter adapter = new PetAdapter(listFavPets, this);
+        ListPetAdapter adapter = new ListPetAdapter(listFavPets, this);
         rvListFavsPets.setAdapter(adapter);
     }
 

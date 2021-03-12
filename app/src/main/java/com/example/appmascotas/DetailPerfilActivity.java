@@ -1,54 +1,45 @@
-package com.example.appmascotas.fragment;
+package com.example.appmascotas;
 
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
-import com.example.appmascotas.Pet;
-import com.example.appmascotas.adapter.PetAdapter;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.widget.TextView;
 import com.example.appmascotas.adapter.PetPerfilAdapter;
-import com.example.appmascotas.R;
 import com.mikhaellopez.circularimageview.CircularImageView;
-
 import java.util.ArrayList;
 
-public class PerfilFragment extends Fragment {
+public class DetailPerfilActivity extends AppCompatActivity {
     private ArrayList<Pet> listPets;
     private RecyclerView rvListPets;
-    private View view;
     private CircularImageView circularImageView;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_perfil,container,false);
-    //buscamos las mascotas
-        ConexionBBDD connection = new ConexionBBDD(view.getContext(),"bd_pets",null,1);
-        listPets = connection.listaPets();
-        listPets = Pet.perfilPets(listPets);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail_perfil);
 
-        TextView tvNombrePerfil = (TextView) view.findViewById(R.id.tvNombrePerfil);
-        tvNombrePerfil.setText(listPets.get(0).getName());
-
+        addMenu();
         addRecyclerView();
         addCircularImageView();
-        return view;
     }
-
+    private void addMenu() {
+        //añadimos el action bar a la activity
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //ponemos el icono de la app
+        getSupportActionBar().setIcon(R.drawable.icon_huella);
+        //ponemos el icono de goBack
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
     private void addCircularImageView() {
-        circularImageView = view.findViewById(R.id.imgFotoPerfil);
+        circularImageView = findViewById(R.id.imgFotoPerfil);
         //src
-        //circularImageView.setImageResource(R.drawable.pet_daisy);
+        //mostramos la imagen de la mascota
         circularImageView.setImageResource(listPets.get(0).getFoto());
 
         // Set Color
@@ -75,11 +66,19 @@ public class PerfilFragment extends Fragment {
     }
 
     private void addRecyclerView() {
+        //recogemos la mascota
+        Pet pet = (Pet) getIntent().getSerializableExtra("pet");
+        listPets = Pet.ponerPerfil(pet);
+
+        //mostramos el nombre de la mascota
+        TextView tvNombrePerfil = (TextView) findViewById(R.id.tvNombrePerfil);
+        tvNombrePerfil.setText(listPets.get(0).getName());
+
         //extendes Fragment, hay que heredarlo para que funcione
-        rvListPets = (RecyclerView) view.findViewById(R.id.rvListPets);
+        rvListPets = (RecyclerView) findViewById(R.id.rvListPets);
 
         //añado layout de como se va a ver
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         rvListPets.setLayoutManager(gridLayoutManager);
 
@@ -87,5 +86,12 @@ public class PerfilFragment extends Fragment {
         PetPerfilAdapter adapter = new PetPerfilAdapter(listPets);
         rvListPets.setAdapter(adapter);
     }
-
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == android.view.KeyEvent.KEYCODE_BACK){
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

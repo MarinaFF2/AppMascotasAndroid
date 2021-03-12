@@ -16,8 +16,8 @@ public class ConexionBBDD extends SQLiteOpenHelper {
     private Context context;
 
     //al llamar al constructor se crea la bbdd
-    public ConexionBBDD(@Nullable Context context, @Nullable String nameBDD, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, nameBDD, factory, version);
+    public ConexionBBDD(@Nullable Context context) {
+        super(context, Utilidades.NAMEBBDD, null, Utilidades.DB_VERSION);
         this.context = context;
     }
 

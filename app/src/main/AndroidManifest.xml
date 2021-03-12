@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.appmascotas">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_huella"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_huella"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppMascotas">
         <activity android:name=".MainActivity">
@@ -19,10 +21,14 @@
         <activity
             android:name=".FavPetsActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".ContactActivity"
+        <activity
+            android:name=".ContactActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".BioActivity"
+        <activity
+            android:name=".BioActivity"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".DetailPerfilActivity"
+            android:parentActivityName=".MainActivity"  />
     </application>
 
 </manifest>

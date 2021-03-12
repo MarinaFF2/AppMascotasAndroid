@@ -18,5 +18,6 @@
         Estudiante de Desarrollo de aplicaciones multiplataforma. \n
         Titulada en Desarrollo de aplicaciones web.
     </string>
+    <string name="text_bio_GitHub"><u>https://github.com/MarinaFF2/AppMascotasAndroid.git</u></string>
 
 </resources>

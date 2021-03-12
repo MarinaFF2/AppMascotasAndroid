@@ -1,12 +1,9 @@
 package com.example.appmascotas;
 
 import android.app.Activity;
-import android.content.Context;
-
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Pet implements Serializable {
     private int id;
@@ -71,21 +68,17 @@ public class Pet implements Serializable {
         return listPets;
     }
     public static void insertarArrayPetBBDD(Activity activity){
-        ConexionBBDD connection = new ConexionBBDD(activity,"bd_pets",null,1);
+        ConexionBBDD connection = new ConexionBBDD(activity);
         ArrayList<Pet> listPets = initListPets();
         for (Pet pet : listPets) {
             //insertamos las mascotas del array
             connection.insertPet(pet);
         }
     }
-    public static ArrayList<Pet> perfilPets(ArrayList<Pet> listPets){
+    public static ArrayList<Pet> ponerPerfil(Pet pet){
         //lista de del perfil
         ArrayList<Pet> listPerfilPets = new ArrayList<> ();
 
-        int max = listPets.size()-1;//declaramos el maximo del random
-        int min = 0;//declaramos el miimo del random
-        int random = new Random().nextInt((max - min) + 1) + min; //conseguimos la posicion random del array
-        Pet pet = listPets.get(random);
         //contruimos datos random de esa mascota
         listPerfilPets.add(new Pet(pet.getId(),pet.getName(),pet.getFoto(),12));
         listPerfilPets.add(new Pet(pet.getId(),pet.getName(),pet.getFoto(),22));
@@ -93,28 +86,7 @@ public class Pet implements Serializable {
         listPerfilPets.add(new Pet(pet.getId(),pet.getName(),pet.getFoto(),17));
         listPerfilPets.add(new Pet(pet.getId(),pet.getName(),pet.getFoto(),283));
         listPerfilPets.add(new Pet(pet.getId(),pet.getName(),pet.getFoto(),83));
+
         return listPerfilPets;
-    }
-    public static ArrayList<Pet> randomFavPets(ArrayList<Pet> listPets){
-        ArrayList<Pet> listFavPets = new ArrayList<> ();
-        final int min = 0;
-        final int max = listPets.size()-1;
-        int cont = 0;
-        while(cont <5) {//mientras sea menor que 5
-            int random = new Random().nextInt((max - min) + 1) + min;
-            if (listFavPets.size() != 0) {
-                for (Pet p : listFavPets) {
-                    if (!listPets.get(random).getName().equals(p.getName())) {
-                        cont++;
-                        listFavPets.add(listPets.get(random));
-                        break;
-                    }
-                }
-            }else{
-                cont++;
-                listFavPets.add(listPets.get(random));
-            }
-        }
-        return  listFavPets;
     }
 }
