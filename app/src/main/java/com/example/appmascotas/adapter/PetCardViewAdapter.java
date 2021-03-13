@@ -22,7 +22,7 @@ public class PetCardViewAdapter extends RecyclerView.Adapter<PetCardViewAdapter.
     private ConexionBBDD connection;
 
     public PetCardViewAdapter(Pet p, Activity activity) {
-        connection = new ConexionBBDD(activity);
+        connection = new ConexionBBDD(activity,"bd_pets",null,1);
         this.p = p;
         this.activity = activity;
     }

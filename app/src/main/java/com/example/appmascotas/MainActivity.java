@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.example.appmascotas.ConexionBBDD.ConexionBBDD;
 import com.example.appmascotas.fragment.ViewPagerFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        connection = new ConexionBBDD(this);
+        connection = new ConexionBBDD(this,"bd_pets",null,1);
         if(connection.listaPets() == null) {
             // rellenamos el array e insertamos las mascotas en la bbdd la 1º vez
-            Pet.insertarArrayPetBBDD(this);
+            Pet.insertarArrayPetBBDD(MainActivity.this);
         }
 
         addMenu();
         addViewPager();
+        addCamare();
+    }
+
+    private void addCamare() {
+        FloatingActionButton buttonCamare = (FloatingActionButton) findViewById(R.id.camare);
+        buttonCamare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //este es el boton de la imagen camara
+                CharSequence text = "A screenshot has been made";
+                int duration = Snackbar.LENGTH_SHORT;
+
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.content),text,duration);
+                snackbar.setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "Undo!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                //mostramos snackbar
+                snackbar.show();
+            }
+        });
     }
 
     private void addViewPager() {
@@ -46,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         listaPets = connection.listaPets();
         //añadimos adaptador view pager
         ScreenSlidePageFragment  pagerAdapter = new ScreenSlidePageFragment (getSupportFragmentManager());
-        for(int i = 0; i<listaPets.size()-1;i++) {
+        for(int i = 0; i<listaPets.size();i++) {
             Fragment fragment = ViewPagerFragment.newInstance(listaPets.get(i),i);
             pagerAdapter.addFragment(fragment);
         }
@@ -91,21 +115,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-    public void onClickDone(View view) {
-        //este es el boton de la imagen camara
-        CharSequence text = "A screenshot has been made";
-        int duration = Snackbar.LENGTH_SHORT;
-
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.content),text,duration);
-        snackbar.setAction("Undo", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Undo!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        //mostramos snackbar
-        snackbar.show();
     }
 
     public class ScreenSlidePageFragment  extends FragmentPagerAdapter {

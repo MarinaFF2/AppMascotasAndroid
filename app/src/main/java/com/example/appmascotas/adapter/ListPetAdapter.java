@@ -50,7 +50,7 @@ public class ListPetAdapter extends RecyclerView.Adapter<ListPetAdapter.PetViewH
                 //añadimos el like
                 p.setLike(p.getLike()+1);
                 //actualizamos la bbdd
-                ConexionBBDD connection = new ConexionBBDD(activity);
+                ConexionBBDD connection = new ConexionBBDD(activity,"bd_pets",null,1);
                 connection.updateLikePet(p.getId(),p.getLike());
 
                 //mostramos el nuevo like

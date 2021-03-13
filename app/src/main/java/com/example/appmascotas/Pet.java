@@ -68,16 +68,16 @@ public class Pet implements Serializable {
         return listPets;
     }
     public static void insertarArrayPetBBDD(Activity activity){
-        ConexionBBDD connection = new ConexionBBDD(activity);
+        ConexionBBDD connection = new ConexionBBDD(activity,"bd_pets",null,1);
         ArrayList<Pet> listPets = initListPets();
         for (Pet pet : listPets) {
             //insertamos las mascotas del array
-            connection.insertPet(pet);
+            connection.insertPet(pet, activity);
         }
     }
     public static ArrayList<Pet> ponerPerfil(Pet pet){
         //lista de del perfil
-        ArrayList<Pet> listPerfilPets = new ArrayList<> ();
+        ArrayList<Pet> listPerfilPets = new ArrayList<>();
 
         //contruimos datos random de esa mascota
         listPerfilPets.add(new Pet(pet.getId(),pet.getName(),pet.getFoto(),12));

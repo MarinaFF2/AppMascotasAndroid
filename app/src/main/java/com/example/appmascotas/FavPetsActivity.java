@@ -43,7 +43,7 @@ public class FavPetsActivity extends AppCompatActivity {
         rvListFavsPets.setLayoutManager(linearLayoutManager);
 
         //buscamos las 5 mascotas favoritas
-        ConexionBBDD connection = new ConexionBBDD(this);
+        ConexionBBDD connection = new ConexionBBDD(this,"bd_pets",null,1);
         listFavPets = connection.listaFavsPets();
 
         //añado adaptador

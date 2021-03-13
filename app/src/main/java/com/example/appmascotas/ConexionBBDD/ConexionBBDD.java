@@ -1,5 +1,6 @@
 package com.example.appmascotas.ConexionBBDD;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,11 +16,17 @@ public class ConexionBBDD extends SQLiteOpenHelper {
     private SQLiteDatabase db;
     private Context context;
 
-    //al llamar al constructor se crea la bbdd
-    public ConexionBBDD(@Nullable Context context) {
-        super(context, Utilidades.NAMEBBDD, null, Utilidades.DB_VERSION);
-        this.context = context;
+    //Nombre de la BD
+    public static final String NAMEBBDD="bd_pets";
+    //Version de la BD
+    public static final int DB_VERSION = 1;
+
+    public ConexionBBDD(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
     }
+
+    //al llamar al constructor se crea la bbdd
+
 
     /**
      * Metodo encargado de generar las tablas correspondientes a las clases en entidades
@@ -45,7 +52,7 @@ public class ConexionBBDD extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertPet(Pet pet) {
+    public void insertPet(Pet pet, Activity activity) {
         db = getWritableDatabase();//declaro la bariable para poder interactuar con la bbdd
 
         /*forma 1
@@ -65,9 +72,9 @@ public class ConexionBBDD extends SQLiteOpenHelper {
         //si idResult es igual 1 ha tenido exito
         Long result = db.insert(Utilidades.TABLA_PET,Utilidades.CAMPO_ID_PET,values);
         if(result > 0) {
-            Toast.makeText(context, "Inserted the pet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Inserted the pet", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(context, "Error inserted the pet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Error inserted the pet", Toast.LENGTH_SHORT).show();
         }
 
         //forma 2
@@ -169,25 +176,26 @@ public class ConexionBBDD extends SQLiteOpenHelper {
     }
     public ArrayList<Pet> listaPets(){
         //SACA TODAS LAS MASCOTAS
-        ArrayList<Pet> listPets = null;
+        ArrayList<Pet> listPets  = new ArrayList<>();
 
         //Crear y / o abrir una base de datos.
         db = getReadableDatabase();
-
-        Pet pet = null;
-        listPets = new ArrayList<Pet>();
-
         //Consulta la tabla dada, devolviendo un cursor sobre el conjunto de resultados.
         Cursor cursor=db.rawQuery("SELECT * FROM "+Utilidades.TABLA_PET,null);
 
         while (cursor.moveToNext()){
-            pet=new Pet();
+
+            Pet pet = new Pet();
             pet.setId(cursor.getInt(0));
             pet.setName(cursor.getString(1));
             pet.setLike(cursor.getInt(2));
             pet.setFoto(cursor.getInt(3));
 
             listPets.add(pet);
+        }
+        //comprobamos que el tamaño no sea 0
+        if(listPets.size() == 0){
+            listPets = null;
         }
         return listPets;
     }
